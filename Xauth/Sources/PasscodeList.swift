@@ -84,16 +84,14 @@ struct PasscodeListView: View {
   
   var body: some View {
     WithViewStore(self.store) { viewStore in
-      viewStore.passcodes.isEmpty
-        ? AnyView(NoPasscodesView())
-        : AnyView(List {
-            ForEachStore(
-              self.store.scope(state: { $0.passcodes }, action: PasscodeListAction.passcode),
-              content: PasscodeView.init
-            )
-            .onMove(perform: { viewStore.send(.move(source: $0, destination: $1)) })
-            .onDelete(perform: { viewStore.send(.delete($0)) })
-          })
+      List {
+        ForEachStore(
+          self.store.scope(state: { $0.passcodes }, action: PasscodeListAction.passcode),
+          content: PasscodeView.init
+        )
+        .onMove(perform: { viewStore.send(.move(source: $0, destination: $1)) })
+        .onDelete(perform: { viewStore.send(.delete($0)) })
+      }
     }
   }
 }

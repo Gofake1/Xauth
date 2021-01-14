@@ -240,19 +240,18 @@ struct AppView: View {
   
   var body: some View {
     WithViewStore(self.store) { viewStore in
-      viewStore.passcodes.isEmpty
-        ? AnyView(NoPasscodesView())
-        : AnyView(
-            PasscodeListView(store: self.store.scope(state: { $0 }, action: AppAction.passcodeList))
-              .sheet(isPresented: .init(get: { viewStore.editToken != nil }, set: { _ in })) {
-                IfLetStore(
-                  self.store.scope(state: { $0.editToken }, action: AppAction.editToken),
-                  then: EditTokenView.init,
-                  else: Text("Whoops")
-                )
-              }
-              .alert(self.store.scope(state: \.alert), dismiss: .alertCancel)
-          )
+      if viewStore.passcodes.isEmpty {
+        NoPasscodesView()
+      } else {
+        PasscodeListView(store: self.store.scope(state: { $0 }, action: AppAction.passcodeList))
+          .sheet(isPresented: .init(get: { viewStore.editToken != nil }, set: { _ in })) {
+            IfLetStore(
+              self.store.scope(state: { $0.editToken }, action: AppAction.editToken),
+              then: EditTokenView.init,
+              else: Text("Whoops")
+            )
+          }
+      }
     }
   }
 }
