@@ -65,17 +65,17 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
     action:      /AppAction.passcodeList,
     environment: { .init(keychain: $0.keychain, keychainRefs: $0.keychainRefs, otpList: $0.otpList) }
   ),
-  addTokenFormReducer.optional.pullback(
+  addTokenFormReducer.optional().pullback(
     state:       \.addTokenForm,
     action:      /AppAction.newToken .. NewTokenAction.addTokenForm,
     environment: { _ in }
   ),
-  editTokenReducer.optional.pullback(
+  editTokenReducer.optional().pullback(
     state:       \.editToken,
     action:      /AppAction.editToken,
     environment: { _ in }
   ),
-  qrScanReducer.optional.pullback(
+  qrScanReducer.optional().pullback(
     state:       \.qrScan,
     action:      /AppAction.newToken .. NewTokenAction.qrScan,
     environment: {
