@@ -392,7 +392,6 @@ struct KeychainPersisting {
 }
 
 enum UserDefaultsError: Error {
-  case badKey(String)
   case badType(Any, String)
 }
 
@@ -403,7 +402,7 @@ struct UserDefaultsArrayPersisting<T> {
   static func real(_ userDefaults: UserDefaults, key: String) -> Self {
     .init(
       get: {
-        guard let data = userDefaults.array(forKey: key) else { return .invalid(UserDefaultsError.badKey(key)) }
+        guard let data = userDefaults.array(forKey: key) else { return .valid([]) }
         guard let array = data as? [T] else { return .invalid(UserDefaultsError.badType(data, "\(T.self)")) }
         return .valid(array)
       },
