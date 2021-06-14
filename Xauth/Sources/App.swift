@@ -52,8 +52,6 @@ enum WindowID: Equatable {
   case addTokenForm, qrScan
 }
 
-infix operator ..
-
 let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
   passcodeReducer.forEach(
     state:       \.passcodes,
@@ -245,11 +243,7 @@ struct AppView: View {
       } else {
         PasscodeListView(store: self.store.scope(state: { $0 }, action: AppAction.passcodeList))
           .sheet(isPresented: .init(get: { viewStore.editToken != nil }, set: { _ in })) {
-            IfLetStore(
-              self.store.scope(state: { $0.editToken }, action: AppAction.editToken),
-              then: EditTokenView.init,
-              else: Text("Whoops")
-            )
+            IfLetStore(self.store.scope(state: { $0.editToken }, action: AppAction.editToken), then: EditTokenView.init)
           }
       }
     }

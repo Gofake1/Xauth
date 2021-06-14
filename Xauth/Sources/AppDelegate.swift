@@ -77,7 +77,7 @@ private var addTokenFormWindow: Window?
 private var qrScanView: NSView?
 private var qrScanWindow: Window?
 
-@NSApplicationMain
+@main
 class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     appViewStore.send(.setup)
@@ -112,7 +112,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.makeKeyAndOrderFront(nil)
         qrScanView   = view
         qrScanWindow = window
-      }, else: { // Bug: https://github.com/pointfreeco/swift-composable-architecture/issues/216
+      }, else: {
         qrScanWindow?.closeForReal()
         qrScanView   = nil
         qrScanWindow = nil

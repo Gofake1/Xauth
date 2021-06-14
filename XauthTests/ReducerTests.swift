@@ -140,9 +140,9 @@ class ReducerTests: XCTestCase {
     store.assert(
       .send(.passcodeList(.delete([0]))) {
         $0.alert = .init(
-          title:           "Delete",
-          message:         "This action cannot be undone.",
-          primaryButton:   .destructive("Confirm", send: .alertConfirm),
+          title:           .init("Delete"),
+          message:         .init("This action cannot be undone."),
+          primaryButton:   .destructive(.init("Confirm"), send: .alertConfirm),
           secondaryButton: .cancel()
         )
         $0.deletions = [.init(id: uuid, offsetForOTPList: 0)]
