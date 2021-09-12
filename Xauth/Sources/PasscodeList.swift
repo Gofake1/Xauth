@@ -32,7 +32,7 @@ let passcodeListReducer = Reducer<AppState, PasscodeListAction, PasscodeListEnvi
     state.alert = .init(
       title:           .init("Delete"),
       message:         .init("This action cannot be undone."),
-      primaryButton:   .destructive(.init("Confirm"), send: .alertConfirm),
+      primaryButton:   .destructive(.init("Confirm"), action: .send(.alertConfirm)),
       secondaryButton: .cancel()
     )
     state.deletions = indices.map {
@@ -46,20 +46,20 @@ let passcodeListReducer = Reducer<AppState, PasscodeListAction, PasscodeListEnvi
     
   case let .move(source, destination):
     environment.otpList.move(fromOffsets: source, toOffset: destination)
-    state.passcodes = .init(environment.otpList.passcodes)
+    state.passcodes = .init(uniqueElements: environment.otpList.passcodes)
     environment.keychainRefs.set(environment.otpList.keychainRefs)
     return .none
     
   case let .passcode(id, .incrementCounterAction):
     environment.otpList.update(hotp: id)
-    state.passcodes = .init(environment.otpList.passcodes)
+    state.passcodes = .init(uniqueElements: environment.otpList.passcodes)
     return .none
     
   case let .passcode(id, .deleteAction):
     state.alert = .init(
       title:           .init("Delete"),
       message:         .init("This action cannot be undone."),
-      primaryButton:   .destructive(.init("Confirm"), send: .alertConfirm),
+      primaryButton:   .destructive(.init("Confirm"), action: .send(.alertConfirm)),
       secondaryButton: .cancel()
     )
     state.deletions = [

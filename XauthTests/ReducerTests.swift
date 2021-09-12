@@ -142,7 +142,7 @@ class ReducerTests: XCTestCase {
         $0.alert = .init(
           title:           .init("Delete"),
           message:         .init("This action cannot be undone."),
-          primaryButton:   .destructive(.init("Confirm"), send: .alertConfirm),
+          primaryButton:   .destructive(.init("Confirm"), action: .send(.alertConfirm)),
           secondaryButton: .cancel()
         )
         $0.deletions = [.init(id: uuid, offsetForOTPList: 0)]

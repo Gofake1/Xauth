@@ -111,12 +111,12 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
       
     case let .updateTime(date):
       environment.otpList.update(date: date)
-      state.passcodes = .init(environment.otpList.passcodes)
+      state.passcodes = .init(uniqueElements: environment.otpList.passcodes)
       return .none
       
     case let .updateFilterText(filterText):
       environment.otpList.filterText = filterText
-      state.passcodes = .init(environment.otpList.passcodes)
+      state.passcodes = .init(uniqueElements: environment.otpList.passcodes)
       return .none
       
     case .showAddTokenForm:
@@ -146,7 +146,7 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
             }
           }
         environment.otpList.remove(atOffsets: IndexSet(deletions.map { $0.offsetForOTPList }))
-        state.passcodes = .init(environment.otpList.passcodes)
+        state.passcodes = .init(uniqueElements: environment.otpList.passcodes)
         environment.keychainRefs.set(environment.otpList.keychainRefs)
         state.alert     = nil
         state.deletions = nil
@@ -181,7 +181,7 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
       case let .valid(newKeychainRef):
         let newOTP = OTP(id: id, keychainRef: newKeychainRef, token: newToken)
         environment.otpList.update(otp: newOTP)
-        state.passcodes = .init(environment.otpList.passcodes)
+        state.passcodes = .init(uniqueElements: environment.otpList.passcodes)
         environment.keychainRefs.set(environment.otpList.keychainRefs)
         state.editToken = nil
       case let .invalid(errors):
@@ -211,7 +211,7 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
       switch validatedOTP {
       case let .valid(otp):
         environment.otpList.add(otps: [otp])
-        state.passcodes = .init(environment.otpList.passcodes)
+        state.passcodes = .init(uniqueElements: environment.otpList.passcodes)
         environment.keychainRefs.set(environment.otpList.keychainRefs)
         state.addTokenForm = nil
       case let .invalid(errors):
@@ -221,7 +221,7 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
       
     case let .newToken(.qrScan(.succeeded(otp))):
       environment.otpList.add(otps: [otp])
-      state.passcodes = .init(environment.otpList.passcodes)
+      state.passcodes = .init(uniqueElements: environment.otpList.passcodes)
       environment.keychainRefs.set(environment.otpList.keychainRefs)
       state.qrScan = nil
       return .none
