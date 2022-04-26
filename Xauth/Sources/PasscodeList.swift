@@ -33,7 +33,7 @@ let passcodeListReducer = Reducer<AppState, PasscodeListAction, PasscodeListEnvi
       title:           .init("Delete"),
       message:         .init("This action cannot be undone."),
       primaryButton:   .destructive(.init("Confirm"), action: .send(.alertConfirm)),
-      secondaryButton: .cancel()
+      secondaryButton: .cancel(.init("Cancel"))
     )
     state.deletions = indices.map {
       let id = state.passcodes[$0].id
@@ -60,7 +60,7 @@ let passcodeListReducer = Reducer<AppState, PasscodeListAction, PasscodeListEnvi
       title:           .init("Delete"),
       message:         .init("This action cannot be undone."),
       primaryButton:   .destructive(.init("Confirm"), action: .send(.alertConfirm)),
-      secondaryButton: .cancel()
+      secondaryButton: .cancel(.init("Cancel"))
     )
     state.deletions = [
       .init(
