@@ -28,7 +28,7 @@ struct Deletion: Equatable {
 
 let passcodeListReducer = Reducer<AppState, PasscodeListAction, PasscodeListEnvironment> { state, action, environment in
   switch action {
-  case let .delete(indices):
+  case let .delete(indices): // Triggered by table item's built-in delete button
     state.alert = .init(
       title:           .init("Delete"),
       message:         .init("This action cannot be undone."),
@@ -55,7 +55,7 @@ let passcodeListReducer = Reducer<AppState, PasscodeListAction, PasscodeListEnvi
     state.passcodes = .init(uniqueElements: environment.otpList.passcodes)
     return .none
     
-  case let .passcode(id, .deleteAction):
+  case let .passcode(id, .deleteAction): // Triggered by table item's secondary menu item
     state.alert = .init(
       title:           .init("Delete"),
       message:         .init("This action cannot be undone."),
@@ -74,7 +74,7 @@ let passcodeListReducer = Reducer<AppState, PasscodeListAction, PasscodeListEnvi
     state.editToken = state.passcodes[id: id].flatMap(EditTokenState.init)
     return .none
     
-  case .passcode:
+  case .passcode: // copyAction is handled in Passcode
     return .none
   }
 }
