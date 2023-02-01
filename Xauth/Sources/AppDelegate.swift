@@ -11,10 +11,10 @@ import ComposableArchitecture
 import SwiftUI
 
 private let appStore = Store(
-  initialState: AppState(),
-  reducer:      Reducer.combine(
-    appReducer,
-    Reducer { state, action, environment in
+  initialState: .init(),
+  reducer:      CombineReducers {
+    AppReducer()
+    Reduce { state, action in
       switch action {
       case let .updateTime(date):
         mainWindowToolbarDelegate.updateCountdown(date)
@@ -23,19 +23,10 @@ private let appStore = Store(
         return .none
       }
     }
-  ),
-  environment:  .init(
-    keychain:     .real,
-    keychainRefs: .real(.standard, key: "keychainRefs"),
-    logging:      Logging.os_log().concatenate(logWindowLogging),
-    makeUUID:     UUID.init,
-    otpFactory:   .init(),
-    otpList:      .init(makeDate: Date.init),
-    qrScan:       qrScan,
-    tokenCoding:  .otpAuthURL()
-  )
+  }
+    .dependency(\.log, Logging.os().combine(logWindowLogging))
 )
-private let appViewStore = ViewStore(appStore)
+private let appViewStore = ViewStore<AppReducer.State, AppReducer.Action>(appStore)
 private let mainWindowToolbarDelegate = MainWindowToolbarDelegate()
 private let mainWindow: NSWindow = {
   let appView = AppView(store: appStore).frame(minWidth: 200, minHeight: 200)
@@ -56,6 +47,7 @@ private let logWindowLogging = Logging {
   logWindow.makeKeyAndOrderFront(nil)
 }
 private let logWindowTextView: NSTextView = {
+  // TODO: dark mode support
   let view = NSTextView()
   view.autoresizingMask        = [.width]
   view.isEditable              = false
@@ -74,7 +66,6 @@ private let logWindow: NSWindow = {
 }()
 private var cancellables: Set<AnyCancellable> = []
 private var addTokenFormWindow: Window?
-private var qrScanView: NSView?
 private var qrScanWindow: Window?
 
 @main
@@ -87,7 +78,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       .store(in: &cancellables)
     
     appStore
-      .scope(state: { $0.addTokenForm }, action: { AppAction.newToken(.addTokenForm($0)) })
+      .scope(state: { $0.addTokenForm }, action: { AppReducer.Action.newToken(.addTokenForm($0)) })
       .ifLet(then: {
         let window = Window(title: "New Passcode", styleMask: [.titled, .closable, .resizable])
         window.contentView = NSHostingView(rootView: AddTokenFormView(store: $0))
@@ -101,20 +92,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       .store(in: &cancellables)
     
     appStore
-      .scope(state: { $0.qrScan })
+      .scope(state: { $0.qrScan }, action: { AppReducer.Action.newToken(.qrScan($0)) })
       .ifLet(then: {
-        let view   = NSHostingView(rootView: QRScanView(store: $0))
         let window = Window(title: "QR Code", styleMask: [.titled, .closable, .resizable])
         window.isOpaque        = false
         window.backgroundColor = .init(white: 0, alpha: 0.2)
-        window.contentView     = view
+        window.contentView     = NSHostingView(rootView: QRScanView(store: $0))
         window.onClose         = { appViewStore.send(.closeWindow(.qrScan)) }
         window.makeKeyAndOrderFront(nil)
-        qrScanView   = view
         qrScanWindow = window
       }, else: {
         qrScanWindow?.closeForReal()
-        qrScanView   = nil
         qrScanWindow = nil
       })
       .store(in: &cancellables)
@@ -256,6 +244,7 @@ private class MainWindowToolbarDelegate: NSObject, NSToolbarDelegate, NSSearchFi
   }
 }
 
+// TODO: rewrite using swift-clocks
 private class WallClock_30_Seconds: Publisher {
   typealias Output  = Date
   typealias Failure = Never
@@ -288,32 +277,41 @@ private class WallClock_30_Seconds: Publisher {
   }
 }
 
-private let qrScan: () -> String? = {
-  let rectInDisplaySpace: (CGRect, CGDirectDisplayID) -> CGRect = {
-    let displayBounds = CGDisplayBounds($1)
-    return .init(
-      origin: .init(
-        x: $0.origin.x,
-        y: displayBounds.maxY - $0.maxY
-      ),
-      size: $0.size
-    )
+// This code lives here in order to reference the qrScanWindow global; haven't found a way to capture it as a dependency
+struct WindowQRScanner {
+  enum Error: Swift.Error {
+    case windowIsNil
+    case getDisplayWithRectError
+    case displayCreateImageError
   }
   
-  guard let window = qrScanWindow, let view = qrScanView else { return nil }
-  let rectInScreenSpace = window.convertToScreen(view.convert(view.frame, to: nil))
-  var displayId: CGDirectDisplayID = 0
-  var displayCount: UInt32 = 0
-  let status = CGGetDisplaysWithRect(rectInScreenSpace, 1, &displayId, &displayCount)
-  guard status == .success else {
-    fatalError("1") //*
+  func scan() throws -> String? {
+    let rectInDisplaySpace: (CGRect, CGDirectDisplayID) -> CGRect = {
+      let displayBounds = CGDisplayBounds($1)
+      return .init(
+        origin: .init(
+          x: $0.origin.x,
+          y: displayBounds.maxY - $0.maxY
+        ),
+        size: $0.size
+      )
+    }
+    
+    guard let window = qrScanWindow, let view = window.contentView else { throw Error.windowIsNil }
+    let rectInScreenSpace = window.convertToScreen(view.convert(view.frame, to: nil))
+    var displayId: CGDirectDisplayID = 0
+    var displayCount: UInt32 = 0
+    let status = CGGetDisplaysWithRect(rectInScreenSpace, 1, &displayId, &displayCount)
+    guard status == .success else { throw Error.getDisplayWithRectError }
+    let rect = rectInDisplaySpace(rectInScreenSpace, displayId)
+    guard let image = CGDisplayCreateImage(displayId, rect: rect) else { throw Error.displayCreateImageError }
+    let qrDetector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])!
+    let features   = qrDetector.features(in: CIImage(cgImage: image))
+    let messages   = features.compactMap { ($0 as? CIQRCodeFeature)?.messageString }
+    return messages.first
   }
-  let rect = rectInDisplaySpace(rectInScreenSpace, displayId)
-  guard let image = CGDisplayCreateImage(displayId, rect: rect) else {
-    fatalError("2") //*
-  }
-  let qrDetector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])!
-  let features   = qrDetector.features(in: CIImage(cgImage: image))
-  let messages   = features.compactMap { ($0 as? CIQRCodeFeature)?.messageString }
-  return messages.first
+}
+
+extension QRScanning: DependencyKey {
+  static let liveValue = Self(scan: WindowQRScanner().scan)
 }

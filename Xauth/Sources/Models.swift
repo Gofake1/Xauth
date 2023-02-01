@@ -7,8 +7,17 @@
 //
 
 import CryptoKit
+import Dependencies
 import Foundation
-import os
+
+struct Passcode: Equatable, Identifiable {
+  /// Uses the same id as the `Token` that generated this passcode
+  let id:        UUID
+  let issuer:    String
+  let account:   String
+  let text:      String
+  let isCounter: Bool
+}
 
 struct Token: Equatable {
   enum Algorithm: String {
@@ -31,6 +40,13 @@ struct Token: Equatable {
     case totp(Int)
   }
   
+  enum Error: Swift.Error {
+    case invalidCounterValue
+    case invalidSecretValue
+    case invalidTokenType
+    case invalidUrl
+  }
+  
   let type:      `Type`
   let key:       SymmetricKey
   let algorithm: Algorithm
@@ -39,24 +55,25 @@ struct Token: Equatable {
   let account:   String
   
   // https://github.com/google/google-authenticator/wiki/Key-Uri-Format
-  static func make(urlComponents: URLComponents) -> Validated<Token, Error> {
-    func makeType(_ host: String?, _ queryItems: [String: String]) -> Validated<`Type`, Error> {
+  // TODO: rewrite using swift-parsing https://github.com/pointfreeco/swift-parsing
+  static func make(urlComponents: URLComponents) -> Validated<Token, Swift.Error> {
+    func makeType(_ host: String?, _ queryItems: [String: String]) -> Validated<`Type`, Swift.Error> {
       switch host {
       case "hotp":
         return queryItems["counter"]
           .flatMap(UInt64.init)
-          .ifNil(error: NSError()) //FIXME
+          .ifNil(error: Error.invalidCounterValue)
           .flatMap { .valid(.hotp($0)) }
       case "totp":
         return queryItems["period"].flatMap(Int.init).flatMap { .valid(.totp($0)) } ?? .valid(.totp(30))
       default:
-        return .invalid(NSError()) //FIXME
+        return .invalid(Error.invalidTokenType)
       }
     }
     
-    func makeSecret(_ queryItems: [String: String]) -> Validated<SymmetricKey, Error> {
+    func makeSecret(_ queryItems: [String: String]) -> Validated<SymmetricKey, Swift.Error> {
       queryItems["secret"]
-        .ifNil(error: NSError(domain: "", code: 0)) //*
+        .ifNil(error: Error.invalidSecretValue)
         .flatMap(base32Decode)
         .flatMap { .valid(SymmetricKey(data: $0)) }
     }
@@ -74,7 +91,7 @@ struct Token: Equatable {
     }
     
     return (urlComponents.queryItems?.dictionary() as [String: String]?)
-      .ifNil(error: NSError(domain: "", code: 0))
+      .ifNil(error: Error.invalidUrl)
       .flatMap { queryItems in
         zip(makeType(urlComponents.host, queryItems), makeSecret(queryItems)).flatMap {
           let (issuer, account) = makeIssuerAndAccount(urlComponents.path, queryItems)
@@ -159,8 +176,8 @@ struct TOTP {
   }
 }
 
-struct OTPFactory { 
-  func addToKeychain(
+enum OTPFactory {
+  static func addToKeychain(
     issuer:      String,
     account:     String,
     key:         String,
@@ -189,7 +206,7 @@ struct OTPFactory {
       }
   }
   
-  func addToKeychain(
+  static func addToKeychain(
     url:         String,
     id:          UUID,
     tokenCoding: TokenCoding<String>,
@@ -201,7 +218,7 @@ struct OTPFactory {
     }
   }
   
-  func fromKeychain(
+  static func fromKeychain(
     keychainRef: Data,
     id:          UUID,
     tokenCoding: TokenCoding<String>,
@@ -210,114 +227,6 @@ struct OTPFactory {
     keychain.read(keychainRef)
       .flatMap(tokenCoding.decode)
       .flatMap { .valid(.init(id: id, keychainRef: keychainRef, token: $0)) }
-  }
-}
-
-class OTPList {
-  enum OTPType {
-    case hotp, totp
-  }
-  
-  private(set) var ids: [(UUID, OTPType)] = []
-  private(set) var hotps: [UUID: HOTP] = [:]
-  private(set) var totps: [UUID: TOTP] = [:]
-  var filterText = ""
-  var passcodes: [Passcode] {
-    if self.filterText.isEmpty {
-      return self.ids.map { self.passcodeCache[$0.0]! }
-    } else {
-      return self.ids.reduce(into: []) {
-        let token = self.otp(id: $1.0)!.token
-        if token.issuer.localizedCaseInsensitiveContains(self.filterText)
-            || token.account.localizedCaseInsensitiveContains(self.filterText) {
-          $0.append(self.passcodeCache[$1.0]!)
-        }
-      }
-    }
-  }
-  var keychainRefs: [Data] {
-    self.ids.map {
-      switch $0.1 {
-      case .hotp: return self.hotps[$0.0]!.otp.keychainRef
-      case .totp: return self.totps[$0.0]!.otp.keychainRef
-      }
-    }
-  }
-  private let makeDate: () -> Date
-  private var passcodeCache: [UUID: Passcode] = [:]
-  
-  init(makeDate: @escaping () -> Date) {
-    self.makeDate = makeDate
-  }
-  
-  func add(otps: [OTP]) {
-    for otp in otps {
-      switch otp.token.type {
-      case .hotp:
-        self.add(hotp: HOTP(otp: otp))
-      case .totp:
-        self.add(totp: TOTP(otp: otp))
-      }
-    }
-  }
-  
-  func add(hotp: HOTP) {
-    self.ids.append((hotp.otp.id, .hotp))
-    self.hotps[hotp.otp.id] = hotp
-    self.passcodeCache[hotp.otp.id] = hotp.generate()
-  }
-  
-  func add(totp: TOTP) {
-    self.ids.append((totp.otp.id, .totp))
-    self.totps[totp.otp.id] = totp
-    self.passcodeCache[totp.otp.id] = totp.generate(self.makeDate())
-  }
-  
-  func otp(id: UUID) -> OTP? {
-    guard let (id, type) = self.ids.first(where: { $0.0 == id }) else { return nil }
-    switch type {
-    case .hotp: return self.hotps[id]!.otp
-    case .totp: return self.totps[id]!.otp
-    }
-  }
-  
-  func update(hotp id: UUID) {
-    self.passcodeCache[id] = self.hotps[id]!.generate()
-  }
-  
-  func update(date: Date) {
-    for (_, totp) in self.totps {
-      self.passcodeCache[totp.otp.id] = totp.generate(date)
-    }
-  }
-  
-  func update(otp: OTP) {
-    switch otp.token.type {
-    case .hotp:
-      let hotp = HOTP(otp: otp)
-      self.hotps[otp.id] = hotp
-      self.passcodeCache[otp.id] = hotp.generate()
-    case .totp:
-      let totp = TOTP(otp: otp)
-      self.totps[otp.id] = totp
-      self.passcodeCache[otp.id] = totp.generate(self.makeDate())
-    }
-  }
-  
-  func move(fromOffsets source: IndexSet, toOffset destination: Int) {
-    self.ids.move(fromOffsets: source, toOffset: destination)
-  }
-  
-  func remove(atOffsets indices: IndexSet) {
-    let ids = indices.map { self.ids[$0] }
-    for (id, type) in ids {
-      switch type {
-      case .hotp: self.hotps[id] = nil
-      case .totp: self.totps[id] = nil
-      }
-      self.passcodeCache[id] = nil
-    }
-    self.ids.remove(atOffsets: indices)
   }
 }
 
@@ -339,14 +248,14 @@ struct Hashing {
   }
 }
 
-enum OTPAuthURLError: Error {
-  case decode(String)
-  case encode(Token)
-}
-
 struct TokenCoding<Raw> {
   let decode: (Raw)   -> Validated<Token, Error>
   let encode: (Token) -> Validated<Raw, Error>
+  
+  enum OTPAuthURLError: Error {
+    case decode(String)
+    case encode(Token)
+  }
   
   static func otpAuthURL() -> TokenCoding<String> {
     .init(
@@ -384,52 +293,15 @@ struct TokenCoding<Raw> {
   }
 }
 
-struct KeychainPersisting {
-  let create: (String, String, String)       -> Validated<Data, Error>
-  let read:   (Data)                         -> Validated<String, Error>
-  let update: (Data, String, String, String) -> Validated<Data, Error>
-  let delete: (Data)                         -> Validated<Void, Error>
+extension TokenCoding<String>: DependencyKey, TestDependencyKey {
+  static let liveValue = TokenCoding.otpAuthURL()
+  static let testValue = TokenCoding.otpAuthURL()
 }
 
-enum UserDefaultsError: Error {
-  case badType(Any, String)
-}
-
-struct UserDefaultsArrayPersisting<T> {
-  let get: ()    -> Validated<[T], Error>
-  let set: ([T]) -> Void
-  
-  static func real(_ userDefaults: UserDefaults, key: String) -> Self {
-    .init(
-      get: {
-        guard let data = userDefaults.array(forKey: key) else { return .valid([]) }
-        guard let array = data as? [T] else { return .invalid(UserDefaultsError.badType(data, "\(T.self)")) }
-        return .valid(array)
-      },
-      set: { userDefaults.set($0, forKey: key) }
-    )
-  }
-}
-
-struct Logging {
-  let log: (String) -> Void
-  
-  func log(errors: [Error]) {
-    self.log("\(errors)")
-  }
-  
-  func concatenate(_ other: Logging) -> Logging {
-    .init {
-      self.log($0)
-      other.log($0)
-    }
-  }
-  
-  static func os_log() -> Logging {
-    let logger = Logger()
-    return .init {
-      logger.log("\($0, privacy: .public)")
-    }
+extension DependencyValues {
+  var tokenCoding: TokenCoding<String> {
+    get { self[TokenCoding<String>.self] }
+    set { self[TokenCoding<String>.self] = newValue }
   }
 }
 

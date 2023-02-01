@@ -11,12 +11,12 @@
 		63115F6624804D490002930C /* Base32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CEA45245EA290009C6E28 /* Base32.swift */; };
 		6312B8B423483D50009AA7F4 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312B8B323483D50009AA7F4 /* Models.swift */; };
 		6337DBE024B9448800C851FE /* ReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6337DBDF24B9448800C851FE /* ReducerTests.swift */; };
-		6337DBE124BD0B9400C851FE /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2B324ADC7110015D574 /* App.swift */; };
-		6337DBE224BD0C1F00C851FE /* EditToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E58B24AE80480008BA4E /* EditToken.swift */; };
-		6337DBE324BD0C2400C851FE /* Passcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2B124ADB8F10015D574 /* Passcode.swift */; };
-		6337DBE424BD0C2600C851FE /* PasscodeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2AF24ADB5B30015D574 /* PasscodeList.swift */; };
-		6337DBE524BD0C2900C851FE /* QRScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E5A324AED5960008BA4E /* QRScan.swift */; };
-		6337DBE624BD0C4E00C851FE /* AddTokenForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E5A524AF00A90008BA4E /* AddTokenForm.swift */; };
+		6337DBE124BD0B9400C851FE /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2B324ADC7110015D574 /* AppView.swift */; };
+		6337DBE224BD0C1F00C851FE /* EditTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E58B24AE80480008BA4E /* EditTokenView.swift */; };
+		6337DBE324BD0C2400C851FE /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2B124ADB8F10015D574 /* PasscodeView.swift */; };
+		6337DBE424BD0C2600C851FE /* PasscodeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2AF24ADB5B30015D574 /* PasscodeListView.swift */; };
+		6337DBE524BD0C2900C851FE /* QRScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E5A324AED5960008BA4E /* QRScanView.swift */; };
+		6337DBE624BD0C4E00C851FE /* AddTokenFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E5A524AF00A90008BA4E /* AddTokenFormView.swift */; };
 		6339A56124BD70620051BFA8 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 6339A56024BD70620051BFA8 /* ComposableArchitecture */; };
 		6339F0DB23F265CB00F89F4E /* Validated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6339F0DA23F265CB00F89F4E /* Validated.swift */; };
 		635B8FBA23481EE0001B5CBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635B8FB923481EE0001B5CBE /* AppDelegate.swift */; };
@@ -26,13 +26,22 @@
 		635CEA5D2463EF3D009C6E28 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CEA5C2463EF3D009C6E28 /* ModelTests.swift */; };
 		635CEA622463EF70009C6E28 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312B8B323483D50009AA7F4 /* Models.swift */; };
 		636DE2AE24ADAF610015D574 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 636DE2AD24ADAF610015D574 /* ComposableArchitecture */; };
-		636DE2B024ADB5B30015D574 /* PasscodeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2AF24ADB5B30015D574 /* PasscodeList.swift */; };
-		636DE2B224ADB8F10015D574 /* Passcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2B124ADB8F10015D574 /* Passcode.swift */; };
-		636DE2B424ADC7110015D574 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2B324ADC7110015D574 /* App.swift */; };
+		636DE2B024ADB5B30015D574 /* PasscodeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2AF24ADB5B30015D574 /* PasscodeListView.swift */; };
+		636DE2B224ADB8F10015D574 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2B124ADB8F10015D574 /* PasscodeView.swift */; };
+		636DE2B424ADC7110015D574 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DE2B324ADC7110015D574 /* AppView.swift */; };
 		63A69D772455458A002C4A79 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A69D762455458A002C4A79 /* Keychain.swift */; };
-		63E5E58C24AE80480008BA4E /* EditToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E58B24AE80480008BA4E /* EditToken.swift */; };
-		63E5E5A424AED5960008BA4E /* QRScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E5A324AED5960008BA4E /* QRScan.swift */; };
-		63E5E5A624AF00A90008BA4E /* AddTokenForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E5A524AF00A90008BA4E /* AddTokenForm.swift */; };
+		63CAA439297E93D000106175 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAA438297E93D000106175 /* UserDefaults.swift */; };
+		63CAA43B2989E0F000106175 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAA43A2989E0F000106175 /* AppModel.swift */; };
+		63CAA43C2989E0F000106175 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAA43A2989E0F000106175 /* AppModel.swift */; };
+		63CAA43E2989E7EC00106175 /* QRScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAA43D2989E7EC00106175 /* QRScanner.swift */; };
+		63CAA43F2989E7EC00106175 /* QRScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAA43D2989E7EC00106175 /* QRScanner.swift */; };
+		63CAA4402989E91B00106175 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAA438297E93D000106175 /* UserDefaults.swift */; };
+		63CAA4412989E92200106175 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A69D762455458A002C4A79 /* Keychain.swift */; };
+		63CAA4432989F42800106175 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAA4422989F42800106175 /* Logger.swift */; };
+		63CAA4442989F42800106175 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAA4422989F42800106175 /* Logger.swift */; };
+		63E5E58C24AE80480008BA4E /* EditTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E58B24AE80480008BA4E /* EditTokenView.swift */; };
+		63E5E5A424AED5960008BA4E /* QRScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E5A324AED5960008BA4E /* QRScanView.swift */; };
+		63E5E5A624AF00A90008BA4E /* AddTokenFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5E5A524AF00A90008BA4E /* AddTokenFormView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,13 +58,17 @@
 		635CEA5A2463EF3D009C6E28 /* XauthTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XauthTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		635CEA5C2463EF3D009C6E28 /* ModelTests.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; tabWidth = 2; };
 		635CEA5E2463EF3D009C6E28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		636DE2AF24ADB5B30015D574 /* PasscodeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeList.swift; sourceTree = "<group>"; };
-		636DE2B124ADB8F10015D574 /* Passcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Passcode.swift; sourceTree = "<group>"; };
-		636DE2B324ADC7110015D574 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		636DE2AF24ADB5B30015D574 /* PasscodeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeListView.swift; sourceTree = "<group>"; };
+		636DE2B124ADB8F10015D574 /* PasscodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
+		636DE2B324ADC7110015D574 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		63A69D762455458A002C4A79 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
-		63E5E58B24AE80480008BA4E /* EditToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditToken.swift; sourceTree = "<group>"; };
-		63E5E5A324AED5960008BA4E /* QRScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScan.swift; sourceTree = "<group>"; };
-		63E5E5A524AF00A90008BA4E /* AddTokenForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenForm.swift; sourceTree = "<group>"; };
+		63CAA438297E93D000106175 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		63CAA43A2989E0F000106175 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		63CAA43D2989E7EC00106175 /* QRScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanner.swift; sourceTree = "<group>"; };
+		63CAA4422989F42800106175 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		63E5E58B24AE80480008BA4E /* EditTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTokenView.swift; sourceTree = "<group>"; };
+		63E5E5A324AED5960008BA4E /* QRScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanView.swift; sourceTree = "<group>"; };
+		63E5E5A524AF00A90008BA4E /* AddTokenFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenFormView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,10 +131,10 @@
 		63A69D782455459A002C4A79 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				635B8FC623481EE3001B5CBE /* Xauth.entitlements */,
-				635B8FC523481EE3001B5CBE /* Info.plist */,
 				635B8FBD23481EE3001B5CBE /* Assets.xcassets */,
+				635B8FC523481EE3001B5CBE /* Info.plist */,
 				635B8FC223481EE3001B5CBE /* Main.storyboard */,
+				635B8FC623481EE3001B5CBE /* Xauth.entitlements */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -129,16 +142,20 @@
 		63A69D79245545D1002C4A79 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				63E5E5A524AF00A90008BA4E /* AddTokenForm.swift */,
-				636DE2B324ADC7110015D574 /* App.swift */,
+				63E5E5A524AF00A90008BA4E /* AddTokenFormView.swift */,
 				635B8FB923481EE0001B5CBE /* AppDelegate.swift */,
+				63CAA43A2989E0F000106175 /* AppModel.swift */,
+				636DE2B324ADC7110015D574 /* AppView.swift */,
 				635CEA45245EA290009C6E28 /* Base32.swift */,
-				63E5E58B24AE80480008BA4E /* EditToken.swift */,
+				63E5E58B24AE80480008BA4E /* EditTokenView.swift */,
 				63A69D762455458A002C4A79 /* Keychain.swift */,
+				63CAA4422989F42800106175 /* Logger.swift */,
 				6312B8B323483D50009AA7F4 /* Models.swift */,
-				636DE2B124ADB8F10015D574 /* Passcode.swift */,
-				636DE2AF24ADB5B30015D574 /* PasscodeList.swift */,
-				63E5E5A324AED5960008BA4E /* QRScan.swift */,
+				636DE2AF24ADB5B30015D574 /* PasscodeListView.swift */,
+				636DE2B124ADB8F10015D574 /* PasscodeView.swift */,
+				63CAA43D2989E7EC00106175 /* QRScanner.swift */,
+				63E5E5A324AED5960008BA4E /* QRScanView.swift */,
+				63CAA438297E93D000106175 /* UserDefaults.swift */,
 				6339F0DA23F265CB00F89F4E /* Validated.swift */,
 			);
 			indentWidth = 2;
@@ -196,7 +213,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1420;
 				ORGANIZATIONNAME = "David Wu";
 				TargetAttributes = {
 					635B8FB523481EE0001B5CBE = {
@@ -253,16 +270,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63E5E5A624AF00A90008BA4E /* AddTokenForm.swift in Sources */,
-				636DE2B424ADC7110015D574 /* App.swift in Sources */,
+				63E5E5A624AF00A90008BA4E /* AddTokenFormView.swift in Sources */,
+				636DE2B424ADC7110015D574 /* AppView.swift in Sources */,
 				635B8FBA23481EE0001B5CBE /* AppDelegate.swift in Sources */,
 				635CEA46245EA291009C6E28 /* Base32.swift in Sources */,
-				63E5E58C24AE80480008BA4E /* EditToken.swift in Sources */,
+				63E5E58C24AE80480008BA4E /* EditTokenView.swift in Sources */,
 				63A69D772455458A002C4A79 /* Keychain.swift in Sources */,
 				6312B8B423483D50009AA7F4 /* Models.swift in Sources */,
-				636DE2B224ADB8F10015D574 /* Passcode.swift in Sources */,
-				636DE2B024ADB5B30015D574 /* PasscodeList.swift in Sources */,
-				63E5E5A424AED5960008BA4E /* QRScan.swift in Sources */,
+				63CAA43B2989E0F000106175 /* AppModel.swift in Sources */,
+				636DE2B224ADB8F10015D574 /* PasscodeView.swift in Sources */,
+				63CAA439297E93D000106175 /* UserDefaults.swift in Sources */,
+				63CAA4432989F42800106175 /* Logger.swift in Sources */,
+				636DE2B024ADB5B30015D574 /* PasscodeListView.swift in Sources */,
+				63CAA43E2989E7EC00106175 /* QRScanner.swift in Sources */,
+				63E5E5A424AED5960008BA4E /* QRScanView.swift in Sources */,
 				6339F0DB23F265CB00F89F4E /* Validated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,17 +292,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6337DBE624BD0C4E00C851FE /* AddTokenForm.swift in Sources */,
-				6337DBE124BD0B9400C851FE /* App.swift in Sources */,
+				6337DBE624BD0C4E00C851FE /* AddTokenFormView.swift in Sources */,
+				6337DBE124BD0B9400C851FE /* AppView.swift in Sources */,
 				63115F6624804D490002930C /* Base32.swift in Sources */,
-				6337DBE224BD0C1F00C851FE /* EditToken.swift in Sources */,
+				6337DBE224BD0C1F00C851FE /* EditTokenView.swift in Sources */,
 				635CEA622463EF70009C6E28 /* Models.swift in Sources */,
-				6337DBE324BD0C2400C851FE /* Passcode.swift in Sources */,
-				6337DBE424BD0C2600C851FE /* PasscodeList.swift in Sources */,
-				6337DBE524BD0C2900C851FE /* QRScan.swift in Sources */,
+				6337DBE324BD0C2400C851FE /* PasscodeView.swift in Sources */,
+				63CAA43F2989E7EC00106175 /* QRScanner.swift in Sources */,
+				63CAA4442989F42800106175 /* Logger.swift in Sources */,
+				6337DBE424BD0C2600C851FE /* PasscodeListView.swift in Sources */,
+				63CAA43C2989E0F000106175 /* AppModel.swift in Sources */,
+				6337DBE524BD0C2900C851FE /* QRScanView.swift in Sources */,
 				63115F6524804BBA0002930C /* Validated.swift in Sources */,
 				635CEA5D2463EF3D009C6E28 /* ModelTests.swift in Sources */,
+				63CAA4402989E91B00106175 /* UserDefaults.swift in Sources */,
 				6337DBE024B9448800C851FE /* ReducerTests.swift in Sources */,
+				63CAA4412989E92200106175 /* Keychain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,6 +359,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -350,7 +377,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -395,6 +422,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -406,7 +434,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -424,6 +452,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W6KLMFETUQ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -445,6 +474,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W6KLMFETUQ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -463,6 +493,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W6KLMFETUQ;
 				INFOPLIST_FILE = XauthTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -480,6 +511,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W6KLMFETUQ;
 				INFOPLIST_FILE = XauthTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -530,7 +562,7 @@
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
 			requirement = {
 				kind = exactVersion;
-				version = 0.34.0;
+				version = 0.49.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

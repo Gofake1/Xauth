@@ -6,11 +6,38 @@
 //  Copyright © 2020 David Wu. All rights reserved.
 //
 
+import Dependencies
 import Foundation
 
-extension KeychainPersisting {
-  static var real: Self {
-    .init(create: Keychain.create, read: Keychain.read, update: Keychain.update, delete: Keychain.delete)
+struct KeychainPersisting {
+  let create: (String, String, String)       -> Validated<Data, Error>
+  let read:   (Data)                         -> Validated<String, Error>
+  let update: (Data, String, String, String) -> Validated<Data, Error>
+  let delete: (Data)                         -> Validated<Void, Error>
+  
+  static func mock(
+    create: @escaping (String, String, String)       -> Validated<Data, Error>   = XCTUnimplemented(),
+    read:   @escaping (Data)                         -> Validated<String, Error> = XCTUnimplemented(),
+    update: @escaping (Data, String, String, String) -> Validated<Data, Error>   = XCTUnimplemented(),
+    delete: @escaping (Data)                         -> Validated<Void, Error>   = XCTUnimplemented()
+  ) -> Self {
+    .init(create: create, read: read, update: update, delete: delete)
+  }
+}
+
+extension KeychainPersisting: DependencyKey {
+  static let liveValue = Self(
+    create: Keychain.create,
+    read:   Keychain.read,
+    update: Keychain.update,
+    delete: Keychain.delete
+  )
+}
+
+extension DependencyValues {
+  var keychainPersisting: KeychainPersisting {
+    get { self[KeychainPersisting.self] }
+    set { self[KeychainPersisting.self] = newValue }
   }
 }
 
